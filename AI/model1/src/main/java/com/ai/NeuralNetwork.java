@@ -192,9 +192,10 @@ public class NeuralNetwork{
 
 class Perceptron{
     double weight, bias, output;
+    boolean train = false;
 
     Perceptron(double[][][] metadata, int y, int x){
-        if (true || Arrays.deepEquals(metadata, null)){
+        if (train || Arrays.deepEquals(metadata, null)){
             Random random = new Random();
             weight = random.nextDouble();
             bias = random.nextDouble();
