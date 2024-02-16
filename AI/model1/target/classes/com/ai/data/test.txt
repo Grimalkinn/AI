@@ -1,0 +1,11 @@
+
+PS C:\Users\Felix Okwuosa\Documents\java>  c:; cd 'c:\Users\Felix Okwuosa\Documents\java'; & 'C:\Program Files\Java\jdk-21\bin\java.exe' '-XX:+ShowCodeDetailsInExceptionMessages' '-cp' 'C:\Users\Felix Okwuosa\Documents\java\AI\model1\target\classes' 'com.ai.Train' 
+testdata: [0.1, 0.2, 0.3]
+result: [1.1341135764, 0.9708012213984002, 4.2548747722696865] 
+time:0.1158813
+size:98
+PS C:\Users\Felix Okwuosa\Documents\java>  c:; cd 'c:\Users\Felix Okwuosa\Documents\java'; & 'C:\Program Files\Java\jdk-21\bin\java.exe' '-XX:+ShowCodeDetailsInExceptionMessages' '-cp' 'C:\Users\Felix Okwuosa\Documents\java\AI\model1\target\classes' 'com.ai.Train' 
+Err::FileNotFound::java.io.FileNotFoundException: .\data\test.txt (The system cannot find the path specified)
+testdata: [0.1, 0.2, 0.3]
+result: [1.1341135764, 0.9708012213984002, 4.2548747722696865] 
+time:0.0958391
