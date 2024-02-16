@@ -29,7 +29,7 @@ public class Main {
                 if (app.userInput == "quit" || app.userInput == "exit") {
                     app.run = false;
                 } else { // pass input to nn and output
-                    System.out.println("[AI]:: " + output.handler(network.think(input.handler(app.userInput))));
+                    System.out.println("[AI]:: " + output.handler(network.multiFeed(input.handler(app.userInput))));
                 }
             }
             scan.close();
