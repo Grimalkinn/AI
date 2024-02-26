@@ -4,6 +4,9 @@ package com.ai;
 // import java.util.Random;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.*;
 
  
@@ -13,17 +16,39 @@ public class NeuralNetwork{
     Perceptron[][] neuralNet;
     int levels, layers, cores;
     double[][][] metadata, randomdata;
-    double[] data;
+    double[] data, limittest;
     // String filename = System.getProperty("user.dir").concat("/data/signature.data");
     String filename;
 
     // Variant2 NN = new Variant2(4, 6);
     NeuralNetwork(int levels, int layers) {
+        // limittest = new double[1000];
+        
         // public Variant2(int levels, int layers) {
         // filename = (Paths.get("").toAbsolutePath().toString()).concat("/data/signature.data");
         filename = ".\\AI\\model1\\src\\main\\java\\com\\ai\\signature.data";
         this.layers = layers;
         this.levels = levels;
+        
+        // only run under heap limit
+        // int heaplimit = 0;
+        // for (int i = 0; i < levels; i++) {
+        //     for (int j = 0; j < layers; j++) {
+        //         heaplimit += 16*2;
+        //     }
+        // }
+        // if (heaplimit >= Math.pow(2, 32)) { 
+
+        if (layers > 99) { 
+            System.out.println("Warning! data limit exceeded by " +(layers-99) +".");
+            System.out.print("Do you wish to continue? (Y/n): ");
+            Scanner scan = new Scanner(System.in);
+            if (scan.nextLine().equals("Y")){ ;; }
+            else{ System.exit(-4);} 
+
+            scan.close();
+        }
+
         data = new double[levels];
         // metadata = new double[levels][layers][2];
         try { metadata = decode(); } catch (Exception e) { metadata = new double[levels][layers][2]; }
@@ -62,53 +87,71 @@ public class NeuralNetwork{
         return data;
     }
 
-    public double[] singleFeed1(double[] data) {
-        //loop through a 3D array and 
-        for (int y = 0; y < levels; y++) {
-            // run mutlithread  
-        } return data;
+    public double[] multiFeed(double[] inputs) {
+        Thread[] threads = new Thread[levels];
+
+        for (int i = 0; i < levels; i++) {
+            final int lev = i;
+
+            threads[i] = new Thread(() -> forwardPropagate(inputs, lev) );
+            threads[i].start();
+        }
+        // Wait for all threads to finish
+        for (Thread thread : threads) {
+            try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+        } return inputs;
+    }
+
+    public void forwardPropagate(double[] outputs, int lev) {
+        double[] data = new double[neuralNet[lev].length];
+        for (int y = 0; y < neuralNet[lev].length; y++) {
+            data[y] = neuralNet[lev][y].process(outputs);
+        }
+
+
+        // for (int i = 0; i < 2; i++) {
+            // System.out.print("\033[2K"); // Clear the current line
+            // System.out.print("\033[1A"); // Move cursor up one line
+        // };
+
     }
 
     
-    public double[] multiFeed(double[] inputs) {
-        for (int i=0; i<layers; i++) {
-            int lev = i;
-            // Thread thread = new Thread( () -> { fowardPropagate(inputs, i); } );
-            // thread.start();
-            new Thread( () -> { fowardPropagate(inputs, lev); } ).start();
-            // System.out.println("Layer #"+i+" ");
-        }
-        return data;
-    }
+    // public double[] multiFeed(double[] inputs) {
+    //     for (int i=0; i<layers; i++) {
+    //         int lev = i;
+    //         // Thread thread = new Thread( () -> { fowardPropagate(inputs, i); } );
+    //         // thread.start();
+    //         new Thread( () -> { fowardPropagate(inputs, lev); } ).start();
+    //         // System.out.println("Layer #"+i+" ");
+    //     }
+    //     return data;
+    // }
 
-    public void set(double[] outputs) { data = outputs; }
 
-    public double[] fowardPropagate(double[] outputs, int lev) {
-        // { {{0,0}, {0,1}, {0,2}}, 
-        //   {{1,0}, {1,1}, {1,2}},  
-        //   {{2,0}, {2,1}, {2,2}} };
+    // public double[] fowardPropagate(double[] outputs, int lev) {
+    //     // { {{0,0}, {0,1}, {0,2}},
+    //     //   {{1,0}, {1,1}, {1,2}},
+    //     //   {{2,0}, {2,1}, {2,2}} };
         
-        // for (int i = 0; i < layers; i++) {
-            for (int y = 0; y < levels; y++) {
-                // for (int x = 0; x < layers; x++) {
-                    // System.out.println("   level #"+x);
-                    // data[y] = neuralNet[x][y].process(singleFeed(outputs));
-                    data[y] = neuralNet[y][lev].process(outputs);
-                    // try { Thread.sleep(1000); } catch (InterruptedException e) {;;}
-                    // }
-                    outputs = data;
-                }
-                System.out.println(Arrays.toString(outputs));
-        // } 
-        return data;
-    }
+    //         for (int y = 0; y < levels; y++) {
+    //                 // System.out.println("   level #"+x);
+    //                 data[y] = neuralNet[y][lev].process(outputs);
+    //                 // try { Thread.sleep(1000); } catch (InterruptedException e) {;;}
+    //                 outputs = data;
+    //             }
+    //             System.out.println(Arrays.toString(outputs));
+    //     // } 
+    //     return data;
+    // }
 
     public void save(boolean append) { 
         try{
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename, append));
-            // writer.write(encode());
-            writer.append(encode());
-            writer.flush();
+            if (append) {writer.write(encode() + "\n" );
+            } else { writer.write(encode()); }
+            // writer.append(encode());
+            // writer.flush();
             writer.close();
         } catch(Exception _404_) {
             // File file = new File(filename);
@@ -175,10 +218,7 @@ public class NeuralNetwork{
                 if (stage3.length >= 2) {
                     decodedData[y][x][0] = Double.valueOf(stage3[0]);
                     decodedData[y][x][1] = Double.valueOf(stage3[1]);
-                } else {
-                    // Handle invalid data format
-                    // You might want to throw an exception or handle this case appropriately
-                }
+                } else {System.out.println("Error reading data file!");}
             }
         }
     
@@ -191,8 +231,8 @@ public class NeuralNetwork{
 
 
 class Perceptron{
-    double weight, bias, output;
-    boolean train = false;
+    private double weight, bias, output;
+    boolean train = true;
 
     Perceptron(double[][][] metadata, int y, int x){
         if (train || Arrays.deepEquals(metadata, null)){
@@ -209,13 +249,15 @@ class Perceptron{
     public double getWeight() { return weight; }
     public double getBias() { return bias; }
 
-    public double process(double[] inputs){
-        while (output < bias) {
-            // output+=(weight * inputs[0])+(weight*inputs[1])+(weight*inputs[2]);
-            for (int i = 0; i < inputs.length; i++) { output += (weight * inputs[i]); }
+    public double process(double[] inputs) {
+        double weightedSum = 0;
+        for (int i = 0; i < inputs.length; i++) {
+            weightedSum += weight * inputs[i];
         }
+        output = weightedSum + bias;
         return output;
     }
+
 
 
 }

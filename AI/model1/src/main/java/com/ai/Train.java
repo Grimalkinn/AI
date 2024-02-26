@@ -11,27 +11,26 @@ import java.lang.*;
 
 
 public class Train {
-    NeuralNetwork net;
+    public NeuralNetwork net;
     boolean run;
-    double[] testdata = {0.1,0.2,0.3}, result;
+    // double[] testdata = {0.1,0.2,0.3};
+    double[] testdata;
+    double[] result;
 
     public Train(){
-        // testdata = new double[3];
+        testdata = new double[99];
         run = true;
     }
 
-    public void output(double[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            // System.out.println(Arrays.toString(arr));
-            System.out.println(arr[i]);
-        }
-    }
+
 
     public void signatures(double[] data) {
         Scanner scan = new Scanner(System.in);
         Random random = new Random();
 
-        // for (int i = 0; i < testdata.length; i++) { testdata[i] = random.nextDouble(); }
+        for (int i = 0; i < testdata.length; i++) { 
+            testdata[i] = random.nextDouble(); 
+        }
         
         try {
             while (run) {
@@ -49,10 +48,11 @@ public class Train {
                 // } else if (input.equals("s")){ net.save(false); run = false;
                 // } else if (input.equals("a")){ net.save(true);
                 // } else { ; }
-                System.out.println("testdata: "+Arrays.toString(testdata));
+
+                // System.out.println(Arrays.toString(testdata)+ " -> testdata");
                 
                 result = net.multiFeed(testdata);
-                net.save(true);
+                net.save(false);
                 run = false;
             }
             
@@ -85,6 +85,9 @@ public class Train {
 }
 
 /* test data
+0.8792029665944442|0.8170826394059227||0.9223348781058427|0.9961237957301102||0.783097200856834|0.6386334351447611|||0.714243869278551|0.5880068739803589||0.6099996686038631|0.3323733136459125||0.716960868417114|0.9515693585885635|||0.7679952627843902|0.9438230179369713||0.4403379631471396|0.6889485301994303||0.9370330114953399|0.292166059506933
+
+
 0.8792029665944442|0.8170826394059227||0.9223348781058427|0.9961237957301102||0.783097200856834|0.6386334351447611|||
 0.714243869278551|0.5880068739803589||0.6099996686038631|0.3323733136459125||0.716960868417114|0.9515693585885635|||
 0.7679952627843902|0.9438230179369713||0.4403379631471396|0.6889485301994303||0.9370330114953399|0.292166059506933
@@ -96,7 +99,7 @@ weights
 
 biases
 0.8 170826394059227| |0.996 1237957301102| |0.6 386334351447611|
-0.588 0068739803589| |0.33 23733136459125| |0.95 15693585885635|
+0.588 0068739803589| |0.33 2373o3136459125| |0.95 15693585885635|
 0.9 438230179369713| |0.6889 485301994303| |0.29 21660595069330|
 */
 
