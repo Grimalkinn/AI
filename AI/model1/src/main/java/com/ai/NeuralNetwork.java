@@ -4,9 +4,6 @@ package com.ai;
 // import java.util.Random;
 
 import java.io.*;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.*;
 
  
@@ -31,13 +28,6 @@ public class NeuralNetwork{
         this.levels = levels;
         
         // only run under heap limit
-        // int heaplimit = 0;
-        // for (int i = 0; i < levels; i++) {
-        //     for (int j = 0; j < layers; j++) {
-        //         heaplimit += 16*2;
-        //     }
-        // }
-        // if (heaplimit >= Math.pow(2, 32)) { 
 
         if (layers > 99) { 
             System.out.println("Warning! data limit exceeded by " +(layers-99) +".");
@@ -108,42 +98,9 @@ public class NeuralNetwork{
             data[y] = neuralNet[lev][y].process(outputs);
         }
 
-
-        // for (int i = 0; i < 2; i++) {
-            // System.out.print("\033[2K"); // Clear the current line
-            // System.out.print("\033[1A"); // Move cursor up one line
-        // };
-
     }
 
     
-    // public double[] multiFeed(double[] inputs) {
-    //     for (int i=0; i<layers; i++) {
-    //         int lev = i;
-    //         // Thread thread = new Thread( () -> { fowardPropagate(inputs, i); } );
-    //         // thread.start();
-    //         new Thread( () -> { fowardPropagate(inputs, lev); } ).start();
-    //         // System.out.println("Layer #"+i+" ");
-    //     }
-    //     return data;
-    // }
-
-
-    // public double[] fowardPropagate(double[] outputs, int lev) {
-    //     // { {{0,0}, {0,1}, {0,2}},
-    //     //   {{1,0}, {1,1}, {1,2}},
-    //     //   {{2,0}, {2,1}, {2,2}} };
-        
-    //         for (int y = 0; y < levels; y++) {
-    //                 // System.out.println("   level #"+x);
-    //                 data[y] = neuralNet[y][lev].process(outputs);
-    //                 // try { Thread.sleep(1000); } catch (InterruptedException e) {;;}
-    //                 outputs = data;
-    //             }
-    //             System.out.println(Arrays.toString(outputs));
-    //     // } 
-    //     return data;
-    // }
 
     public void save(boolean append) { 
         try{
