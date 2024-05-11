@@ -15,6 +15,8 @@ public class Input {
         return output;
     }
 
+    // below code is yet to be implimented
+    // see Train.java for running and testing
     public void tokenizer() {
         // StringTokenizer st = new StringTokenizer(userInput, " ");
     }
