@@ -11,6 +11,7 @@ public class Main {
         run = true;
     }
 
+    // run code from here 
     public static void main(String[] args) {
         try { // terminal user interface 
             Main app = new Main();
