@@ -1,0 +1,10 @@
++ front-end in react
++ back-end in java 
++ database using mySQL
++ miscallenious affiliate cookie injector
++ automated article generator
++ ads
++ mobile admin app for monitoring 
++ licences and terms of service
++ testing and deployment
++ marketing and advertising

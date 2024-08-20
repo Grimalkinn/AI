@@ -18,7 +18,7 @@ public class Train {
     double[] result;
 
     public Train(){
-        testdata = new double[99];
+        testdata = new double[115];
         run = true;
     }
 

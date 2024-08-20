@@ -29,7 +29,7 @@ public class NeuralNetwork{
         
         // only run under heap limit
 
-        if (layers > 99) { 
+        if (layers > 1000) { 
             System.out.println("Warning! data limit exceeded by " +(layers-99) +".");
             System.out.print("Do you wish to continue? (Y/n): ");
             Scanner scan = new Scanner(System.in);
